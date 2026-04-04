@@ -30,5 +30,6 @@ namespace WebTinTuc.Data.Entities
         public virtual Category ?Category { get; set; }
         public string ?UserId { get; set; } // Nếu bạn muốn lưu người đăng bài
         public bool IsPublished { get; set; } // Trạng thái xuất bản bài viết
+        public bool IsActive { get; internal set; }
     }
 }

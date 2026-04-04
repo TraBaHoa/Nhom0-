@@ -21,9 +21,9 @@ namespace WebTinTuc.Repositories
 
         public async Task<IEnumerable<Post>> GetHotNewsAsync(int count)
         {
+            // Giả sử bạn có cột IsHot hoặc lấy theo lượt xem
             return await _context.Posts
-                .Include(p => p.Category)
-                .Where(p => p.IsHot)
+                .Where(p => p.IsActive)
                 .OrderByDescending(p => p.CreatedDate)
                 .Take(count)
                 .ToListAsync();
@@ -41,7 +41,7 @@ namespace WebTinTuc.Repositories
         public async Task<IEnumerable<Post>> GetLatestPostsAsync(int count)
         {
             return await _context.Posts
-                .OrderByDescending(p => p.CreatedDate)
+                .OrderByDescending(p => p.CreatedDate) // Dùng đúng CreatedDate
                 .Take(count)
                 .ToListAsync();
         }

@@ -1,43 +1,53 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebTinTuc.Repositories;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class NewsController : Controller
+namespace WebTinTuc.Controllers // Đảm bảo đúng namespace dự án của bạn
 {
-    private readonly IPostRepository _postRepository;
-    private readonly ICategoryRepository _categoryRepository;
-
-    public NewsController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+    public class NewsController : Controller
     {
-        _postRepository = postRepository;
-        _categoryRepository = categoryRepository;
-    }
+        private readonly IPostRepository _postRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-    // Trang chủ: Hiển thị Slider tin hot và tin mới nhất
-    public async Task<IActionResult> Index()
-    {
-        var hotNews = await _postRepository.GetHotNewsAsync(5); // Lấy 5 tin nổi bật
-        var latestNews = await _postRepository.GetLatestPostsAsync(10);
+        public NewsController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        {
+            _postRepository = postRepository;
+            _categoryRepository = categoryRepository;
+        }
 
-        ViewBag.HotNews = hotNews;
-        return View(latestNews);
-    }
+        // Trang danh sách Tin Tức: Bấm vào Menu sẽ chạy vào đây
+        public async Task<IActionResult> Index()
+        {
+            // Lấy toàn bộ bài viết từ Repository
+            var allPosts = await _postRepository.GetAllAsync();
 
-    // Xem chi tiết bài viết
-    public async Task<IActionResult> Details(int id)
-    {
-        var post = await _postRepository.GetByIdAsync(id);
-        if (post == null) return NotFound();
+            // Sắp xếp tin mới nhất lên đầu dựa trên CreatedDate
+            var model = allPosts.OrderByDescending(x => x.CreatedDate).ToList();
 
-        return View(post);
-    }
+            ViewData["Title"] = "Tin tức & Hoạt động nhà trường";
+            return View(model);
+        }
 
-    // Xem danh sách tin theo Chuyên mục (Tuyển sinh, Hoạt động...)
-    public async Task<IActionResult> Category(int id)
-    {
-        var posts = await _postRepository.GetPostsByCategoryAsync(id);
-        var category = await _categoryRepository.GetByIdAsync(id);
-        ViewBag.CategoryName = category?.Name;
+        // Xem chi tiết bài viết
+        public async Task<IActionResult> Details(int id)
+        {
+            var post = await _postRepository.GetByIdAsync(id);
+            if (post == null) return NotFound();
 
-        return View(posts);
+            return View(post);
+        }
+
+        // Xem danh sách tin theo Chuyên mục (Tuyển sinh, Hoạt động...)
+        // Trong NewsController.cs
+        public async Task<IActionResult> Category(int id)
+        {
+            // Lấy danh sách tin theo mã loại (Category ID)
+            var posts = await _postRepository.GetPostsByCategoryAsync(id);
+            var category = await _categoryRepository.GetByIdAsync(id);
+
+            ViewBag.CategoryName = category?.Name;
+            return View(posts); // Bạn cần có file Views/News/Category.cshtml
+        }
     }
 }

@@ -30,4 +30,17 @@ public class HomeController : Controller
 
         return View(post); // Truyền dữ liệu sang file Details.cshtml
     }
+
+    public IActionResult About()
+    {
+        // Bạn có thể truyền tiêu đề trang qua ViewData
+        ViewData["Title"] = "Giới thiệu về trường THPT Nguyễn Du";
+        return View();
+    }
+
+    public IActionResult Contact()
+    {
+        ViewData["Title"] = "Liên hệ - Trường THPT Nguyễn Du";
+        return View();
+    }
 }
