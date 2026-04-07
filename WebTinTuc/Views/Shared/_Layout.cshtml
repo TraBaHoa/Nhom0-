@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - THPT NGUYỄN DU</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar-brand { font-size: 1.5rem; letter-spacing: 1px; }
+        footer { background: #343a40; color: white; padding: 30px 0; margin-top: 40px; }
+        footer a { color: #ffc107; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .nav-logout-btn { background: none; border: none; padding: 0.5rem 1rem; }
+    </style>
+</head>
+<body>
+    <header class="shadow-sm mb-4">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-school me-2"></i>THPT NGUYỄN DU
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">TRANG CHỦ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="About">GIỚI THIỆU</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" asp-area="" asp-controller="News" asp-action="Index">TIN TỨC</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Contact">LIÊN HỆ</a></li>
+
+                        @* --- PHẦN QUẢN TRỊ: Chỉ dành cho Admin --- *@
+                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-warning fw-bold" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user-shield me-1"></i>QUẢN TRỊ
+                                </a>
+                                <ul class="dropdown-menu shadow border-0 mt-2">
+                                    <li><a class="dropdown-item py-2" asp-area="" asp-controller="Categories" asp-action="Index">Quản lý Danh mục</a></li>
+                                    <li><a class="dropdown-item py-2" asp-area="" asp-controller="Posts" asp-action="Index">Quản lý Bài viết</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+
+                    @* --- PHẦN TÀI KHOẢN & ĐĂNG XUẤT --- *@
+                    <ul class="navbar-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item d-flex align-items-center">
+                                <span class="nav-link text-white small me-2">Chào, @User.Identity.Name!</span>
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" class="btn btn-outline-light btn-sm">
+                                        <i class="fas fa-sign-out-alt"></i> Thoát
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white border rounded px-3" asp-area="Identity" asp-page="/Account/Login">
+                                    <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-uppercase fw-bold border-bottom pb-2">Trường THPT Nguyễn Du</h5>
+                    <p class="small mt-3 mb-1"><i class="fas fa-map-marker-alt me-2"></i>Địa chỉ: XXI Đồng Nai, Phường 15, Quận 10, TP. Hồ Chí Minh</p>
+                    <p class="small mb-1"><i class="fas fa-phone me-2"></i>Điện thoại: 028.3864.1373</p>
+                    <p class="small"><i class="fas fa-envelope me-2"></i>Email: c3nguyendu.tphcm@moet.edu.vn</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5 class="text-uppercase fw-bold border-bottom pb-2">Liên kết nhanh</h5>
+                    <ul class="list-unstyled mt-3">
+                        <li><a href="#">Cổng thông tin học sinh</a></li>
+                        <li><a href="#">Thời khóa biểu tuần</a></li>
+                        <li><a href="#">Thư viện trực tuyến</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <div class="text-center small text-secondary">
+                &copy; 2026 - Bản quyền thuộc về @(User.Identity?.IsAuthenticated == true ? User.Identity.Name : "TRAQUANGVINH") - HUTECH IT
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

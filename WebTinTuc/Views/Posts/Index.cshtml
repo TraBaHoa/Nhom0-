@@ -1,0 +1,72 @@
+﻿@model IEnumerable<WebTinTuc.Data.Entities.Post>
+@{
+    ViewData["Title"] = "Quản lý Bài Viết";
+}
+
+<h1 class="text-primary">Danh Sách Bài Viết</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fa fa-plus"></i> Tạo bài viết mới
+    </a>
+</p>
+
+<table class="table table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th style="width: 25%">Tiêu đề</th>
+            <th style="width: 15%">Hình ảnh</th>
+            <th style="width: 15%">Chuyên mục</th>
+            <th style="width: 15%">Ngày đăng</th>
+            <th style="width: 15%">Tóm tắt</th>
+            <th style="width: 15%">Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="fw-bold">@Html.DisplayFor(modelItem => item.Title)</td>
+                <td class="text-center">
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" style="width:80px; height:60px; object-fit:cover; border-radius:5px;" alt="Ảnh bài viết" />
+                    }
+                    else
+                    {
+                        <span class="text-muted small">Không ảnh</span>
+                    }
+                </td>
+                <td>
+                    <span class="badge bg-info text-dark">
+                        @Html.DisplayFor(modelItem => item.Category!.Name)
+                    </span>
+                </td>
+                <td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    @if (item.Summary?.Length > 50)
+                    {
+                        @(item.Summary.Substring(0, 50) + "...")
+                    }
+                    else
+                    {
+                        @item.Summary
+                    }
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Sửa">
+                            Sửa
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white" title="Xem chi tiết">
+                            Xem
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Xóa">
+                            Xóa
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

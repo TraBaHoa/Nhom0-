@@ -1,0 +1,65 @@
+﻿@model WebTinTuc.Models.ViewModels.PostViewModel
+
+@{
+    ViewData["Title"] = "Tạo Bài Viết Mới";
+}
+
+<h1 class="text-primary">Đăng Bài Viết</h1>
+<hr />
+<div class="row">
+    <div class="col-md-9">
+        @* Cần enctype="multipart/form-data" để upload file ảnh *@
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label">Tiêu đề bài viết</label>
+                <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            @* Dropdown chọn Category: Tin mới nhất, Thông báo... *@
+            <div class="form-group mb-3">
+                <label asp-for="CategoryId" class="control-label">Chuyên mục</label>
+                <select asp-for="CategoryId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))">
+                    <option value="">-- Chọn chuyên mục hiển thị --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Summary" class="control-label">Tóm tắt ngắn</label>
+                <textarea asp-for="Summary" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Summary" class="text-danger"></span>
+            </div>
+
+            @* Phần thêm hình ảnh: Thay thế ô nhập text ImageUrl *@
+            <div class="form-group mb-3">
+                <label asp-for="ImageFile" class="control-label">Hình ảnh bài viết</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Content" class="control-label">Nội dung chi tiết</label>
+                @* Dùng textarea cho nội dung dài *@
+                <textarea asp-for="Content" class="form-control" rows="8"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            @* Các trường UserId, IsPublished, IsActive, IsHot đã được loại bỏ khỏi giao diện *@
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Đăng bài ngay</button>
+                <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
