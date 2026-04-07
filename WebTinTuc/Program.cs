@@ -23,6 +23,7 @@ builder.Services.AddDefaultIdentity<User>(options => {
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
 })
+.AddRoles<IdentityRole>() // <-- THÊM DÒNG NÀY VÀO ĐÂY ĐỂ NHẬN DIỆN QUYỀN ADMIN
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -68,6 +69,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages();
-
+app.MapRazorPages(); // Kích hoạt các trang đăng nhập/đăng ký của Identity
 app.Run();

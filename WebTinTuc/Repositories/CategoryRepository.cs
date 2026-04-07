@@ -8,6 +8,16 @@ namespace WebTinTuc.Repositories
     {
         public CategoryRepository(ApplicationDbContext context) : base(context) { }
 
+        public async Task DeleteAsync(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task<IEnumerable<Category>> GetParentCategoriesAsync()
         {
             // Lấy các mục menu chính (không có ParentId)

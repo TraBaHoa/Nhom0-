@@ -1,0 +1,40 @@
+﻿@model WebTinTuc.Data.Entities.Post
+
+@{
+    ViewData["Title"] = "Chi tiết bài viết";
+}
+
+<h1 class="text-primary">Chi tiết bài viết</h1>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2 text-muted">Tiêu đề</dt>
+        <dd class="col-sm-10 fw-bold">@Html.DisplayFor(model => model.Title)</dd>
+
+        <dt class="col-sm-2 text-muted">Chuyên mục</dt>
+        <dd class="col-sm-10">
+            <span class="badge bg-info text-dark">@Html.DisplayFor(model => model.Category!.Name)</span>
+        </dd>
+
+        <dt class="col-sm-2 text-muted">Hình ảnh</dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" style="max-width:250px; border-radius:5px; border:1px solid #ddd;" />
+            }
+        </dd>
+
+        <dt class="col-sm-2 text-muted">Tóm tắt</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Summary)</dd>
+
+        <dt class="col-sm-2 text-muted">Nội dung</dt>
+        <dd class="col-sm-10">@Html.Raw(Model.Content)</dd>
+
+        <dt class="col-sm-2 text-muted">Ngày tạo</dt>
+        <dd class="col-sm-10">@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")</dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Sửa</a>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</div>
