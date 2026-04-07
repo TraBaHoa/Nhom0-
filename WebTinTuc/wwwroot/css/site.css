@@ -1,0 +1,104 @@
+/* Biến màu sắc chuẩn trường Nguyễn Du */
+:root {
+    --nd-blue: #004a99;
+    --nd-red: #d9534f;
+    --nd-bg: #fdfae7;
+}
+
+body {
+    background-color: var(--nd-bg);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin-bottom: 0;
+}
+
+/* Header & Top Bar */
+.top-bar {
+    background-color: #f8f9fa;
+    font-size: 12px;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+}
+
+.main-header {
+    background-color: #fff;
+    padding: 15px 0;
+    border-bottom: 4px solid var(--nd-red);
+}
+
+.logo-img {
+    height: 85px;
+}
+
+.school-sub-title {
+    color: var(--nd-red);
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.school-main-title {
+    color: var(--nd-blue);
+    font-weight: 800;
+}
+
+/* Menu Điều hướng */
+.navbar-custom {
+    background-color: var(--nd-blue);
+    padding: 0;
+}
+
+    .navbar-custom .nav-link {
+        color: white !important;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 13px;
+        padding: 12px 20px !important;
+    }
+
+    .navbar-custom .nav-item:hover {
+        background-color: #003366;
+    }
+
+/* Dropdown Menu */
+.dropdown-menu {
+    border-radius: 0;
+    border: none;
+    background: var(--nd-blue);
+}
+
+.dropdown-item {
+    color: white !important;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 20px;
+}
+
+    .dropdown-item:hover {
+        background: #003366;
+    }
+
+/* Thanh tin chạy */
+.search-bar {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+    font-size: 13px;
+}
+
+.ticker-label {
+    background: var(--nd-red);
+    color: white;
+    padding: 2px 10px;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+/* Footer */
+footer {
+    background-color: var(--nd-blue);
+    color: white;
+    border-top: 5px solid #ffc107;
+}
+
+    footer a {
+        color: #ffc107;
+    }
