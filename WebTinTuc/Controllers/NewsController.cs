@@ -64,9 +64,6 @@ namespace WebTinTuc.Controllers // Đảm bảo đúng namespace dự án của 
             // QUAN TRỌNG: Lấy thông tin chuyên mục từ Database
             var category = await _categoryRepository.GetByIdAsync(id);
 
-            // Truyền tên chuyên mục vào ViewBag để View hiển thị
-            ViewBag.CategoryName = category?.Name ?? "TIN TỨC & SỰ KIỆN";
-
             // Phải trả về danh sách bài viết (Model là IEnumerable<Post>)
             return View(posts);
         }
