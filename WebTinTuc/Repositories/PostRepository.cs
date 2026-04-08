@@ -50,8 +50,21 @@ namespace WebTinTuc.Repositories
         public override async Task<Post?> GetByIdAsync(int id)
         {
             return await _context.Posts
+<<<<<<< HEAD
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
+=======
+                .Include(p => p.Category) // Load thông tin Category kèm theo
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public async Task<IEnumerable<Post>> GetPostsByCategoryNameAsync(string categoryName)
+        {
+            return await _context.Posts
+                .Include(p => p.Category)
+                .Where(p => p.Category != null && p.Category.Name == categoryName && p.IsActive).OrderByDescending(p => p.CreatedDate)
+                .ToListAsync();
+        }
+>>>>>>> 4a07c099ce32cd7584b80047d1e0b16866f95d16
     }
 }

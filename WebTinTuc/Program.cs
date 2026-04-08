@@ -23,6 +23,10 @@ builder.Services.AddDefaultIdentity<User>(options => {
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
 })
+<<<<<<< HEAD
+=======
+.AddRoles<IdentityRole>() // <-- THÊM DÒNG NÀY VÀO ĐÂY ĐỂ NHẬN DIỆN QUYỀN ADMIN
+>>>>>>> 4a07c099ce32cd7584b80047d1e0b16866f95d16
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -68,6 +72,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+<<<<<<< HEAD
 app.MapRazorPages();
 
+=======
+app.MapRazorPages(); // Kích hoạt các trang đăng nhập/đăng ký của Identity
+>>>>>>> 4a07c099ce32cd7584b80047d1e0b16866f95d16
 app.Run();
