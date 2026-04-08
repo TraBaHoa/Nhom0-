@@ -1,65 +1,75 @@
-﻿@model IEnumerable<WebTinTuc.Data.Entities.Post>
-@{
-    ViewData["Title"] = "Trang chủ";
-    var hotNews = ViewBag.HotNews as IEnumerable<WebTinTuc.Data.Entities.Post>;
-}
-
-<div class="row">
+﻿<div class="row">
     <div class="col-md-8">
         <div id="schoolCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
             <div class="carousel-inner shadow rounded">
-                @if (hotNews != null)
-                {
+                @{
                     int i = 0;
-                    foreach (var item in hotNews)
-                    {
-                        <div class="carousel-item @(i == 0 ? "active" : "")">
-                            <img src="@item.ImageUrl" class="d-block w-100" style="height:400px; object-fit:cover;">
-                            <div class="carousel-caption d-none d-md-block bg-dark-50">
-                                <h5>@item.Title</h5>
-                            </div>
+                }
+                @foreach (var item in Model.EventPosts)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="@item.ImageUrl" class="d-block w-100" style="height:400px; object-fit:cover;">
+                        <div class="carousel-caption d-none d-md-block bg-dark-50">
+                            <h5>@item.Title</h5>
                         </div>
-                        i++;
-                    }
+                    </div>
+                    i++;
                 }
             </div>
         </div>
 
         <h5 class="category-title mb-3">Tin tức mới nhất</h5>
         <div class="row">
-            @foreach (var item in Model)
+            @foreach (var item in Model.LatestPostsFromCategory)
             {
-                <div class="col-md-6">
-                    <div class="card news-card">
+                <div class="col-md-6 mb-3">
+                    <div class="card news-card h-100">
                         <img src="@item.ImageUrl" class="card-img-top" height="180" style="object-fit:cover;">
                         <div class="card-body">
                             <h6 class="card-title fw-bold text-dark">@item.Title</h6>
-                            <p class="card-text small text-muted">@item.Summary</p>
-                            <a href="/News/Details/@item.Id" class="btn btn-sm btn-outline-primary">Xem thêm</a>
+                            <a href="/Posts/Details/@item.Id" class="btn btn-sm btn-outline-primary">Xem thêm</a>
                         </div>
                     </div>
                 </div>
             }
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5 class="category-title mb-3">Đoàn Thanh Niên</h5>
+                @foreach (var item in Model.YouthUnionPosts)
+                {
+                    <div class="mb-2 border-bottom pb-1">
+                        <a href="/Posts/Details/@item.Id" class="text-decoration-none text-dark small">@item.Title</a>
+                    </div>
+                }
+            </div>
+            <div class="col-md-6">
+                <h5 class="category-title mb-3">Công Đoàn</h5>
+                @foreach (var item in Model.UnionPosts)
+                {
+                    <div class="mb-2 border-bottom pb-1">
+                        <a href="/Posts/Details/@item.Id" class="text-decoration-none text-dark small">@item.Title</a>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 
     <div class="col-md-4">
         <h5 class="category-title mb-3">Thông báo</h5>
         <div class="list-group shadow-sm mb-4">
-            <a href="#" class="list-group-item list-group-item-action small">
-                <i class="fa fa-chevron-right me-2 text-danger"></i> Kế hoạch tuyển sinh lớp 10 năm học 2026-2027
-            </a>
-            <a href="#" class="list-group-item list-group-item-action small">
-                <i class="fa fa-chevron-right me-2 text-danger"></i> Thông báo nghỉ lễ Giỗ tổ Hùng Vương
-            </a>
-            <a href="#" class="list-group-item list-group-item-action small">
-                <i class="fa fa-chevron-right me-2 text-danger"></i> Lịch thi học kỳ II dành cho khối 12
-            </a>
+            @foreach (var item in Model.NotificationPosts)
+            {
+                <a href="/Posts/Details/@item.Id" class="list-group-item list-group-item-action small">
+                    <i class="fa fa-chevron-right me-2 text-danger"></i> @item.Title
+                </a>
+            }
         </div>
 
         <h5 class="category-title mb-3">Video nổi bật</h5>
         <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden">
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/tbnz0nD96nc" title="YouTube video" allowfullscreen></iframe>
         </div>
     </div>
 </div>

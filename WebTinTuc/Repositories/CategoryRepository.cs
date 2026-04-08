@@ -20,8 +20,8 @@ namespace WebTinTuc.Repositories
 
         public async Task<IEnumerable<Category>> GetParentCategoriesAsync()
         {
-            // Lấy các mục menu chính (không có ParentId)
             return await _context.Categories
+                .AsNoTracking() // Tăng tốc độ truy vấn, giảm tải cho SQL Server
                 .Where(c => c.ParentId == null)
                 .ToListAsync();
         }

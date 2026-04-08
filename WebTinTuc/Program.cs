@@ -12,8 +12,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(); // Tự động kết nối lại nếu DB bận
+        sqlOptions.CommandTimeout(60);    // Tăng thời gian chờ lên 60s
+    }));
 // Register Identity once with options
 builder.Services.AddDefaultIdentity<User>(options => {
     options.SignIn.RequireConfirmedAccount = false;

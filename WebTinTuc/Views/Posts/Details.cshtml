@@ -13,7 +13,14 @@
 
         <dt class="col-sm-2 text-muted">Chuyên mục</dt>
         <dd class="col-sm-10">
-            <span class="badge bg-info text-dark">@Html.DisplayFor(model => model.Category!.Name)</span>
+            @if (Model.Category != null)
+            {
+                <span class="badge bg-info text-dark">@Model.Category.Name</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Không có chuyên mục</span>
+            }
         </dd>
 
         <dt class="col-sm-2 text-muted">Hình ảnh</dt>
@@ -34,7 +41,11 @@
         <dd class="col-sm-10">@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")</dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Sửa</a>
-    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+<div class="mt-4 pb-5">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning px-4 shadow-sm">
+        <i class="fas fa-edit me-1"></i> Chỉnh sửa
+    </a>
+    <a asp-action="Index" class="btn btn-outline-secondary px-4 shadow-sm">
+        <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
+    </a>
 </div>

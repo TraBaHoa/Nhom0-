@@ -7,6 +7,7 @@
             <div class="card-header bg-primary text-white fw-bold">DANH MỤC</div>
             <div class="list-group list-group-flush shadow-sm">
                 
+                @* 1. TIN TỨC (Bấm để mở menu con) *@
                 <a href="#submenuTinTuc" class="list-group-item list-group-item-action text-primary fw-bold border-bottom"
                        data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="submenuTinTuc">
                     <i class="fas fa-caret-down me-2"></i>TIN TỨC
@@ -23,10 +24,12 @@
                     </a>
                 </div>
 
-                <a asp-controller="News" asp-action="Category" asp-route-id="4" class="list-group-item list-group-item-action text-primary small border-bottom">
+                @* 2. THÔNG BÁO (Bấm là vào thẳng trang danh sách) *@
+                <a asp-controller="News" asp-action="Category" asp-route-id="4" class="list-group-item list-group-item-action text-primary fw-bold border-bottom">
                     <i class="fas fa-caret-right me-2"></i>THÔNG BÁO
                 </a>
 
+                @* 3. TUYỂN SINH 10 (Bấm để mở menu con) *@
                 <a href="#submenuTuyenSinh" class="list-group-item list-group-item-action text-primary fw-bold border-bottom"
                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="submenuTuyenSinh">
                     <i class="fas fa-caret-down me-2"></i>TUYỂN SINH 10
@@ -43,6 +46,7 @@
                     </a>
                 </div>
 
+                @* 4. NGUYỄN DU TRONG TÔI (Bấm để mở menu con) *@
                 <a href="#submenuNguyenDu" class="list-group-item list-group-item-action text-primary fw-bold border-bottom"
                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="submenuNguyenDu">
                     <i class="fas fa-caret-down me-2"></i>NGUYỄN DU TRONG TÔI
@@ -220,12 +224,12 @@
         @if (Model.LatestPosts != null && Model.LatestPosts.Any())
         {
            
-            foreach (var item in Model.LatestPosts.Take(5)) 
+            foreach (var item in Model.LatestPosts.Take(4)) 
             {
                 <div class="col-md-3 col-6">
                     <div class="gallery-container overflow-hidden rounded shadow-sm border border-white border-4">
-                        <a href="@Url.Action("Details", "Posts", new { id = item.Id })">
-                            <img src="@item.ImageUrl" 
+                        <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                           <img src="@item.ImageUrl" 
                                  class="img-fluid w-100 hover-zoom-effect" 
                                  style="height:180px; object-fit:cover; transition: transform .3s;" 
                                  alt="@item.Title"

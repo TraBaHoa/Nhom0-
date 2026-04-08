@@ -43,35 +43,29 @@ namespace WebTinTuc.Controllers
         {
             if (ModelState.IsValid)
             {
-                // 1. Xử lý ảnh
                 string imageUrl = string.Empty;
                 if (model.ImageFile != null)
                 {
                     imageUrl = await _blobHelper.UploadBlobAsync(model.ImageFile, "posts");
                 }
 
-                // 2. TẠO ĐỐI TƯỢNG POST (Entity) TỪ MODEL (ViewModel)
-                // Đây là bước quan trọng nhất để sửa lỗi trong ảnh
                 var post = new Post
                 {
                     Title = model.Title,
                     Summary = model.Summary,
                     Content = model.Content,
                     ImageUrl = imageUrl,
-                    CategoryId = model.CategoryId,
+                    CategoryId = model.CategoryId, // Đảm bảo ID này khớp với bảng Categories (1-8, 12)
                     CreatedDate = DateTime.Now,
                     IsActive = true,
                     IsPublished = true,
-                    // UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) // Nếu có dùng Identity
+                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) // Lưu ID của user đang đăng nhập
                 };
 
-                // 3. Truyền biến 'post' (kiểu Entity) vào hàm CreateAsync
                 await _postRepository.CreateAsync(post);
-
                 return RedirectToAction(nameof(Index));
             }
 
-            // Nếu lỗi, nạp lại Categories cho Dropdown
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
             return View(model);
         }

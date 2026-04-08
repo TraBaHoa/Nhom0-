@@ -38,33 +38,57 @@
                     }
                 </td>
                 <td>
-                    <span class="badge bg-info text-dark">
-                        @Html.DisplayFor(modelItem => item.Category!.Name)
-                    </span>
-                </td>
-                <td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>
-                    @if (item.Summary?.Length > 50)
+                    @if (item.Category != null)
                     {
-                        @(item.Summary.Substring(0, 50) + "...")
+                        <span class="badge bg-info text-dark">
+                            @item.Category.Name
+                        </span>
                     }
                     else
                     {
-                        @item.Summary
+                        <span class="badge bg-secondary">Chưa phân mục</span>
+                    }
+                </td>
+                <td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                <td title="@item.Summary">
+                    @* Di chuột vào để xem đầy đủ *@
+                    @if (!string.IsNullOrEmpty(item.Summary))
+                    {
+                        @(item.Summary.Length > 50 ? item.Summary.Substring(0, 50) + "..." : item.Summary)
                     }
                 </td>
                 <td>
-                    <div class="btn-group">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Sửa">
-                            Sửa
+                    <div class="btn-group shadow-sm">
+                        <a asp-action="Edit" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-warning px-3"
+                               title="Sửa"
+                               style="border-radius: 5px 0 0 5px; transition: all 0.3s;">
+                            <i class="fas fa-edit me-1"></i> Sửa
                         </a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white" title="Xem chi tiết">
-                            Xem
+    
+                        <a asp-action="Details" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-info px-3"
+                               title="Xem chi tiết"
+                               style="transition: all 0.3s;">
+                            <i class="fas fa-eye me-1"></i> Xem
                         </a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Xóa">
-                            Xóa
+    
+                        <a asp-action="Delete" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-danger px-3"
+                               title="Xóa"
+                               style="border-radius: 0 5px 5px 0; transition: all 0.3s;">
+                            <i class="fas fa-trash-alt me-1"></i> Xóa
                         </a>
                     </div>
+
+                    <style>
+                           /* Hiệu ứng khi di chuột vào nút */
+                           .btn-group .btn:hover {
+                           transform: translateY(-2px);
+                           box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                           z-index: 2; /* Để phần shadow không bị nút bên cạnh che mất */
+                          }
+                    </style>
                 </td>
             </tr>
         }

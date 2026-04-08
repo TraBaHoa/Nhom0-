@@ -19,7 +19,7 @@ namespace WebTinTuc.Repositories
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>().AsNoTracking().ToListAsync();
         }
 
         public async Task CreateAsync(T entity)
@@ -40,6 +40,10 @@ namespace WebTinTuc.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> ExistsAsync(int id) => await _context.Set<T>().AnyAsync();
+        public async Task<bool> ExistsAsync(int id)
+        {
+            var entity = await GetByIdAsync(id);
+            return entity != null;
+        }
     }
 }
