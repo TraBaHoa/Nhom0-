@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Tin Tức Trường THPT</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+            body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+            .navbar-brand { font-size: 1.5rem; letter-spacing: 1px; }
+            footer { background: #343a40; color: white; padding: 30px 0; margin-top: 40px; }
+            footer a { color: #ffc107; text-decoration: none; }
+            footer a:hover { text-decoration: underline; }
+            .dropdown-menu { border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <header class="shadow-sm mb-4">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-school me-2"></i>THPT NGUYỄN DU
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">TRANG CHỦ</a>
+                        </li>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                DANH MỤC
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @if (ViewBag.Categories != null)
+                                {
+                                    foreach (var item in ViewBag.Categories)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="News" asp-action="DanhMuc" asp-route-id="@item.Id">
+                                                @item.Name
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item disabled" href="#">Chưa có danh mục</a></li>
+                                }
+                            </ul>
+                        </li>
+
+                        <li class="nav-item"><a class="nav-link text-white" asp-controller="Home" asp-action="About">GIỚI THIỆU</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" asp-controller="News" asp-action="Index">TIN TỨC</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" asp-controller="Home" asp-action="Contact">LIÊN HỆ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-uppercase fw-bold border-bottom pb-2">Trường THPT Nguyễn Du</h5>
+                    <p class="small mt-3 mb-1"><i class="fas fa-map-marker-alt me-2"></i>Địa chỉ: [Nhập địa chỉ của trường tại đây]</p>
+                    <p class="small mb-1"><i class="fas fa-phone me-2"></i>Điện thoại: 028.xxx.xxxx</p>
+                    <p class="small"><i class="fas fa-envelope me-2"></i>Email: c3nguyendu.tphcm@moet.edu.vn</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5 class="text-uppercase fw-bold border-bottom pb-2">Liên kết nhanh</h5>
+                    <ul class="list-unstyled mt-3">
+                        <li><a href="#">Cổng thông tin học sinh</a></li>
+                        <li><a href="#">Thời khóa biểu tuần</a></li>
+                        <li><a href="#">Thư viện trực tuyến</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <div class="text-center small text-secondary">
+                &copy; 2026 - Bản quyền thuộc về PHẠM VĂN ĐIỂN - HUTECH IT
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
