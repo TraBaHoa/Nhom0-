@@ -1,0 +1,80 @@
+﻿@model WebTinTuc.Models.ViewModels.PostViewModel
+@{
+    ViewData["Title"] = "Chỉnh sửa bài viết";
+}
+
+<h1 class="text-primary">Chỉnh sửa bài viết</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImageUrl" /> @* Giữ đường dẫn ảnh cũ nếu không đổi *@
+
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label fw-bold">Tiêu đề</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="CategoryId" class="control-label fw-bold">Chuyên mục</label>
+                <select asp-for="CategoryId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name", Model.CategoryId))">
+                    <option value="">-- Chọn chuyên mục --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ImageFile" class="control-label fw-bold">Thay đổi hình ảnh đại diện (Để trống nếu giữ nguyên)</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="mt-2">
+                        <small>Ảnh hiện tại:</small><br />
+                        <img src="@Model.ImageUrl" width="120" class="img-thumbnail" />
+                    </div>
+                }
+            </div>
+
+            @* --- PHẦN THÊM MỚI: QUẢN LÝ NHIỀU ẢNH (GALLERY) --- *@
+            <div class="form-group mb-3 border p-3 rounded bg-light">
+                <label class="control-label fw-bold text-success">
+                    <i class="fas fa-images me-1"></i> Thêm ảnh vào bộ sưu tập (Gallery)
+                </label>
+                <input type="file" name="moreImages" class="form-control" accept="image/*" multiple />
+                <small class="text-muted">Bạn có thể chọn thêm nhiều ảnh mới cho bài viết này.</small>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Summary" class="control-label fw-bold">Tóm tắt</label>
+                <textarea asp-for="Summary" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Summary" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Content" class="control-label fw-bold">Nội dung</label>
+                <textarea asp-for="Content" class="form-control" rows="10"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                    <i class="fas fa-save me-1"></i> Lưu thay đổi
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4 shadow-sm">
+                    <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
