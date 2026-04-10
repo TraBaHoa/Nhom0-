@@ -5,6 +5,7 @@
 
 <h1 class="text-primary">Chỉnh sửa bài viết</h1>
 <hr />
+
 <div class="row">
     <div class="col-md-9">
         <form asp-action="Edit" enctype="multipart/form-data">
@@ -28,7 +29,7 @@
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="ImageFile" class="control-label fw-bold">Thay đổi hình ảnh (Để trống nếu giữ nguyên)</label>
+                <label asp-for="ImageFile" class="control-label fw-bold">Thay đổi hình ảnh đại diện (Để trống nếu giữ nguyên)</label>
                 <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
                 @if (!string.IsNullOrEmpty(Model.ImageUrl))
                 {
@@ -37,6 +38,15 @@
                         <img src="@Model.ImageUrl" width="120" class="img-thumbnail" />
                     </div>
                 }
+            </div>
+
+            @* --- PHẦN THÊM MỚI: QUẢN LÝ NHIỀU ẢNH (GALLERY) --- *@
+            <div class="form-group mb-3 border p-3 rounded bg-light">
+                <label class="control-label fw-bold text-success">
+                    <i class="fas fa-images me-1"></i> Thêm ảnh vào bộ sưu tập (Gallery)
+                </label>
+                <input type="file" name="moreImages" class="form-control" accept="image/*" multiple />
+                <small class="text-muted">Bạn có thể chọn thêm nhiều ảnh mới cho bài viết này.</small>
             </div>
 
             <div class="form-group mb-3">

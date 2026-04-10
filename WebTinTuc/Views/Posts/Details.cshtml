@@ -5,6 +5,7 @@
 }
 
 <h1 class="text-primary">Chi tiết bài viết</h1>
+
 <div>
     <hr />
     <dl class="row">
@@ -23,11 +24,11 @@
             }
         </dd>
 
-        <dt class="col-sm-2 text-muted">Hình ảnh</dt>
+        <dt class="col-sm-2 text-muted">Hình ảnh đại diện</dt>
         <dd class="col-sm-10">
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
-                <img src="@Model.ImageUrl" style="max-width:250px; border-radius:5px; border:1px solid #ddd;" />
+                <img src="@Model.ImageUrl" style="max-width:250px; border-radius:5px; border:1px solid #ddd;" class="shadow-sm" />
             }
         </dd>
 
@@ -35,12 +36,35 @@
         <dd class="col-sm-10">@Html.DisplayFor(model => model.Summary)</dd>
 
         <dt class="col-sm-2 text-muted">Nội dung</dt>
-        <dd class="col-sm-10">@Html.Raw(Model.Content)</dd>
+        @* CẬP NHẬT: Thêm class admin-post-content để xử lý giãn dòng *@
+        <dd class="col-sm-10 admin-post-content">
+            @Html.Raw(Model.Content)
+        </dd>
 
-        <dt class="col-sm-2 text-muted">Ngày tạo</dt>
-        <dd class="col-sm-10">@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")</dd>
+        @* PHẦN THÊM MỚI: HIỂN THỊ BỘ SƯU TẬP ẢNH (GALLERY) *@
+        @if (Model.PostImages != null && Model.PostImages.Any())
+        {
+            <dt class="col-sm-2 text-muted">Bộ sưu tập ảnh</dt>
+            <dd class="col-sm-10">
+                <div class="row g-2 mt-1">
+                    @foreach (var img in Model.PostImages)
+                    {
+                        <div class="col-md-3 col-6">
+                            <div class="border rounded p-1 bg-white shadow-sm">
+                                <img src="@img.ImageUrl" class="img-fluid rounded" style="height: 120px; width: 100%; object-fit: cover;" />
+                            </div>
+                        </div>
+                    }
+                </div>
+                <small class="text-muted mt-2 d-block">* Các ảnh này sẽ hiển thị ở cuối bài viết ngoài trang chủ.</small>
+            </dd>
+        }
+
+        <dt class="col-sm-2 text-muted mt-3">Ngày tạo</dt>
+        <dd class="col-sm-10 mt-3">@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")</dd>
     </dl>
 </div>
+
 <div class="mt-4 pb-5">
     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning px-4 shadow-sm">
         <i class="fas fa-edit me-1"></i> Chỉnh sửa
@@ -49,3 +73,26 @@
         <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
     </a>
 </div>
+
+<style>
+    /* Xử lý lỗi chữ bị chồng chất và làm đẹp nội dung */
+    .admin-post-content {
+        line-height: 1.8 !important; /* Tạo độ giãn dòng hợp lý */
+        text-align: justify;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        font-size: 1rem;
+        color: #333;
+        white-space: pre-line; /* Giữ nguyên xuống dòng nếu là text thuần */
+    }
+
+    /* Đảm bảo hình ảnh trong nội dung không bị tràn khung */
+    .admin-post-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+</style>

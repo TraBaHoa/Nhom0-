@@ -19,6 +19,7 @@ namespace WebTinTuc.Models.ViewModels
 
         [Display(Name = "Chọn ảnh đại diện")]
         public IFormFile ?ImageFile { get; set; } // Chứa file ảnh upload
+        public List<IFormFile>? MoreImages { get; set; }
 
         public string ?ImageUrl { get; set; }
 

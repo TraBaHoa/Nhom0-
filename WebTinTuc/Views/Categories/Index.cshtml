@@ -4,40 +4,57 @@
     ViewData["Title"] = "Danh Mục";
 }
 
-<h1>Danh Mục</h1>
+<style>
+    .cat-container { background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px; }
+    .table-cat thead th { border-top: none; border-bottom: 2px solid #edf2f7; color: #4a5568; font-weight: 700; padding: 18px; }
+    .table-cat tbody td { padding: 18px; vertical-align: middle; border-bottom: 1px solid #f7fafc; }
+    
+    /* Làm đẹp danh mục cha */
+    .parent-badge { background: #f1f5f9; color: #475569; padding: 5px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; }
+    
+    /* Hiệu ứng nút bấm */
+    .cat-actions .btn { border-radius: 8px; font-weight: 500; margin-right: 5px; transition: all 0.2s; }
+    .cat-actions .btn:hover { background-color: #f8fafc; transform: scale(1.05); }
+</style>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ParentId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td><strong>@Html.DisplayFor(modelItem => item.Name)</strong></td>
-                <td>
-                    @* Nếu có thuộc tính Parent trong Entity, hãy dùng: item.Parent?.Name *@
-                    @(item.ParentId == null ? "Danh mục gốc" : $"Mã cha: {item.ParentId}")
-                </td>
-                <td>
-                    <div class="btn-group">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container mt-4">
+    <div class="cat-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-primary mb-0"><i class="fas fa-list-ul me-2"></i>Quản Lý Danh Mục</h2>
+            <a asp-action="Create" class="btn btn-primary rounded-pill px-4">
+                <i class="fas fa-plus-circle me-1"></i> Thêm mới danh mục
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-cat">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-folder me-2"></i>Tên Danh Mục</th>
+                        <th><i class="fas fa-level-down-alt me-2"></i>Danh Mục Cha</th>
+                        <th class="text-end">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><strong class="text-dark">@Html.DisplayFor(modelItem => item.Name)</strong></td>
+                            <td>
+                                <span class="parent-badge">
+                                    <i class="fas fa-sitemap me-1 small"></i>
+                                    @(item.ParentId == null ? "Danh mục gốc" : $"Mã cha: {item.ParentId}")
+                                </span>
+                            </td>
+                            <td class="text-end cat-actions">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Sửa</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Chi tiết</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<WebTinTuc.Data.Entities.Post>
+
+@{
+    ViewData["Title"] = "Cổng thông tin học sinh";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="alert alert-primary border-0 shadow-sm d-flex align-items-center py-4" style="border-left: 5px solid #0056b3 !important;">
+        <i class="fas fa-user-circle fa-3x me-3 text-primary"></i>
+        <div>
+            <h5 class="fw-bold mb-1">Chào mừng bạn đến với Cổng thông tin học sinh Nguyễn Du!</h5>
+            <p class="mb-0 small text-muted">Hệ thống quản lý học tập dành riêng cho học sinh và phụ huynh.</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-2">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm transition-hover">
+                <div class="card-body text-center p-4">
+                    <div class="bg-light-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-calendar-alt text-primary fa-lg"></i>
+                    </div>
+                    <h6 class="fw-bold">Thời khóa biểu</h6>
+                    <p class="small text-muted">Xem lịch học chi tiết các môn học trong tuần.</p>
+                    <a asp-action="Schedule" class="btn btn-sm btn-outline-primary px-3 rounded-pill">Xem ngay</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm transition-hover">
+                <div class="card-body text-center p-4">
+                    <div class="bg-light-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-chart-bar text-success fa-lg"></i>
+                    </div>
+                    <h6 class="fw-bold">Tra cứu điểm số</h6>
+                    <p class="small text-muted">Cập nhật kết quả kiểm tra định kỳ và cuối kỳ.</p>
+                    <a asp-action="Grades" class="btn btn-sm btn-outline-success px-3 rounded-pill">Tra cứu</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm transition-hover">
+                <div class="card-body text-center p-4">
+                    <div class="bg-light-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="fas fa-clock text-danger fa-lg"></i>
+                    </div>
+                    <h6 class="fw-bold">Lịch kiểm tra</h6>
+                    <p class="small text-muted">Theo dõi lịch thi và các bài kiểm tra sắp tới.</p>
+                    <a href="#" class="btn btn-sm btn-outline-danger px-3 rounded-pill">Xem lịch</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-light-primary { background-color: #e7f1ff; }
+    .bg-light-success { background-color: #e8f5e9; }
+    .bg-light-danger { background-color: #ffebee; }
+
+    .transition-hover {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+</style>

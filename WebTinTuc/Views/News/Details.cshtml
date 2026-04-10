@@ -1,0 +1,119 @@
+﻿@model WebTinTuc.Data.Entities.Post
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container mt-4 mb-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-controller="News" asp-action="Index" class="text-decoration-none">Tin tức</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chi tiết bài viết</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-9">
+            <article class="post-details">
+                <h1 class="fw-bold text-primary mb-3">@Model.Title</h1>
+                
+                <div class="post-meta d-flex align-items-center text-muted mb-4 border-bottom pb-3">
+                    <span class="me-3">
+                        <i class="far fa-calendar-alt me-1"></i> @Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")
+                    </span>
+                    @if (Model.Category != null)
+                    {
+                        <span>
+                            <i class="fas fa-folder-open me-1"></i> @Model.Category.Name
+                        </span>
+                    }
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="post-thumbnail text-center mb-4">
+                        <img src="@Model.ImageUrl" class="img-fluid rounded shadow" style="max-height: 500px; width: 100%; object-fit: cover;" alt="@Model.Title">
+                    </div>
+                }
+
+                @* Chỉnh sửa class post-content ở dưới style *@
+                <div class="post-content" style="font-size: 1.1rem; text-align: justify;">
+                    @Html.Raw(Model.Content)
+                </div>
+@if (Model.PostImages != null && Model.PostImages.Any())
+{
+    <div class="post-gallery mt-5">
+        <h5 class="fw-bold border-start border-4 border-primary ps-2 mb-4">HÌNH ẢNH LIÊN QUAN</h5>
+        <div class="row g-3">
+            @foreach (var img in Model.PostImages)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="gallery-item shadow-sm border rounded p-1">
+                        <a href="@img.ImageUrl" target="_blank">
+                            <img src="@img.ImageUrl" class="img-fluid rounded" 
+                                 style="height: 200px; width: 100%; object-fit: cover;" 
+                                 alt="Ảnh kèm theo bài viết">
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+                <div class="mt-5 pt-3 border-top text-end">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="window.history.back()">
+                        <i class="fas fa-arrow-left me-1"></i> Quay lại trang trước
+                    </button>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="sticky-top" style="top: 20px;">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white fw-bold">
+                        <i class="fas fa-list-ul me-2"></i> TIN LIÊN QUAN
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item small">
+                                <a href="#" class="text-decoration-none text-dark">Thông báo về việc nghỉ lễ sắp tới...</a>
+                            </li>
+                            <li class="list-group-item small">
+                                <a href="#" class="text-decoration-none text-dark">Kế hoạch thi học kỳ 2 năm học 2025-2026...</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="fw-bold text-uppercase small">Hỗ trợ học sinh</h6>
+                        <hr>
+                        <p class="small text-muted mb-3">Liên hệ văn phòng đoàn nếu bạn cần giúp đỡ.</p>
+                        <a href="mailto:c3nguyendu.tphcm@moet.edu.vn" class="btn btn-sm btn-primary w-100">
+                            <i class="fas fa-envelope me-1"></i> Gửi Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* PHẦN BỔ SUNG ĐỂ TÁCH DÒNG VÀ LÀM ĐẸP */
+    .post-content {
+        line-height: 1.8; /* Giãn cách giữa các dòng chữ */
+        white-space: pre-line; /* Ép xuống dòng nếu dữ liệu từ SQL chỉ là text có dấu Enter */
+        display: block;
+    }
+
+    .post-content p { 
+        margin-bottom: 1.5rem !important; /* Tạo khoảng trống rõ rệt giữa các đoạn văn */
+        display: block; 
+    }
+    .post-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 15px 0; display: block; }
+    .breadcrumb-item + .breadcrumb-item::before { content: "\f105"; font-family: "Font Awesome 5 Free"; font-weight: 900; padding: 0 8px; color: #6c757d; }
+</style>

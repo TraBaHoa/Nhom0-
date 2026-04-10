@@ -36,6 +36,8 @@ namespace WebTinTuc.Data.Entities
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
 
+        public virtual ICollection<PostImage> PostImages { get; set; } = new List<PostImage>();
+
         public string? UserId { get; set; }
 
         [Display(Name = "Xuất bản")]

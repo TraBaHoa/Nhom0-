@@ -6,21 +6,21 @@
 
 <h1 class="text-primary">Đăng Bài Viết</h1>
 <hr />
+
 <div class="row">
     <div class="col-md-9">
-        @* Cần enctype="multipart/form-data" để upload file ảnh *@
+        @* Chỉ sử dụng MỘT thẻ form duy nhất bao quanh tất cả các ô nhập liệu *@
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
             <div class="form-group mb-3">
-                <label asp-for="Title" class="control-label">Tiêu đề bài viết</label>
-                <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề..." />
+                <label asp-for="Title" class="control-label fw-bold">Tiêu đề bài viết</label>
+                <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
-            @* Dropdown chọn Category: Tin mới nhất, Thông báo... *@
             <div class="form-group mb-3">
-                <label asp-for="CategoryId" class="control-label">Chuyên mục</label>
+                <label asp-for="CategoryId" class="control-label fw-bold">Chuyên mục</label>
                 <select asp-for="CategoryId" class="form-control"
                         asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))">
                     <option value="">-- Chọn chuyên mục hiển thị --</option>
@@ -28,23 +28,29 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
 
+            @* 1. Ô nhập Ảnh chính (Thumbnail) - Dùng ImageFile của ViewModel *@
             <div class="form-group mb-3">
-                <label asp-for="Summary" class="control-label">Tóm tắt ngắn</label>
-                <textarea asp-for="Summary" class="form-control" rows="2"></textarea>
-                <span asp-validation-for="Summary" class="text-danger"></span>
-            </div>
-
-            @* Phần thêm hình ảnh: Thay thế ô nhập text ImageUrl *@
-            <div class="form-group mb-3">
-                <label asp-for="ImageFile" class="control-label">Hình ảnh bài viết</label>
+                <label asp-for="ImageFile" class="control-label fw-bold">Ảnh chính (Thumbnail)</label>
                 <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
 
+            @* 2. Ô nhập Bộ sưu tập ảnh (Nhiều ảnh) - Dùng MoreImages của ViewModel *@
+            <div class="form-group mb-3 border p-3 rounded bg-light">
+                <label class="control-label fw-bold text-success">Bộ sưu tập ảnh (Nhiều ảnh)</label>
+                <input type="file" name="moreImages" class="form-control" accept="image/*" multiple />
+                <small class="text-muted">Bạn có thể giữ phím Ctrl để chọn nhiều ảnh cùng lúc.</small>
+            </div>
+
             <div class="form-group mb-3">
-                <label asp-for="Content" class="control-label">Nội dung chi tiết</label>
-                @* Dùng textarea cho nội dung dài *@
-                <textarea asp-for="Content" class="form-control" rows="8"></textarea>
+                <label asp-for="Summary" class="control-label fw-bold">Tóm tắt ngắn</label>
+                <textarea asp-for="Summary" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Summary" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Content" class="control-label fw-bold">Nội dung chi tiết</label>
+                <textarea asp-for="Content" class="form-control" rows="10"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
 

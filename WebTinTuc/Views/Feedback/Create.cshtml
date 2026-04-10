@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Gửi góp ý";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0" style="border-top: 5px solid #dc3545 !important;">
+                <div class="card-header bg-white py-3">
+                    <h4 class="text-danger fw-bold mb-0 text-uppercase">
+                        <i class="fas fa-envelope-open-text me-2"></i>Hộp thư góp ý Nguyễn Du
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success border-0 shadow-sm mb-4">@TempData["Success"]</div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger border-0 shadow-sm mb-4">@TempData["Error"]</div>
+                    }
+
+                    <form asp-action="Send" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Họ và tên của bạn</label>
+                            <input type="text" name="fullName" class="form-control" placeholder="Nhập họ tên..." required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Nội dung góp ý</label>
+                            <textarea name="content" class="form-control" rows="5" placeholder="Chia sẻ ý kiến của bạn với nhà trường..." required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger btn-lg shadow-sm">
+                                <i class="fas fa-paper-plane me-2"></i>Gửi ý kiến ngay
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light text-center py-3 text-muted small">
+                    Mọi góp ý của bạn sẽ giúp nhà trường cải thiện chất lượng giáo dục tốt hơn.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

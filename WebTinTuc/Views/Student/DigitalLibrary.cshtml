@@ -1,0 +1,82 @@
+﻿@model IEnumerable<WebTinTuc.Data.Entities.Post>
+
+@{
+    ViewData["Title"] = "Thư viện số Nguyễn Du";
+}
+
+<div class="container mt-4 mb-5">
+    @* Tiêu đề trang *@
+    <div class="border-start border-5 border-success ps-3 mb-4">
+        <h3 class="text-success fw-bold text-uppercase mb-0">Thư viện số Nguyễn Du</h3>
+        <p class="text-muted small">Kho tài liệu, bài giảng và tài nguyên học tập điện tử.</p>
+    </div>
+
+    <div class="row g-4">
+        @* Cột bên trái: Danh mục *@
+        <div class="col-md-3">
+            <div class="list-group shadow-sm">
+                @* Các liên kết lọc tài liệu - Vinh có thể truyền tham số qua URL *@
+                <a asp-action="DigitalLibrary" asp-route-type="all" class="list-group-item list-group-item-action active bg-success border-success">Tất cả tài liệu</a>
+                <a asp-action="DigitalLibrary" asp-route-type="sgk" class="list-group-item list-group-item-action">Sách giáo khoa điện tử</a>
+                <a asp-action="DigitalLibrary" asp-route-type="elearning" class="list-group-item list-group-item-action">Bài giảng E-Learning</a>
+                <a asp-action="DigitalLibrary" asp-route-type="test" class="list-group-item list-group-item-action">Đề thi minh họa</a>
+            </div>
+        </div>
+
+        @* Cột bên phải: Danh sách tài liệu *@
+        <div class="col-md-9">
+            <div class="card border-0 shadow-sm p-4">
+                @* Thanh tìm kiếm hoạt động *@
+                <form asp-action="DigitalLibrary" method="get">
+                    <div class="input-group mb-4">
+                        <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm tài liệu..." value="@ViewData["CurrentFilter"]">
+                        <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tên tài liệu</th>
+                                <th>Loại</th>
+                                <th>Ngày đăng</th>
+                                <th class="text-center">Tải về</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="fw-bold text-dark">@item.Title</td>
+                                        <td>
+                                            @* Hiển thị Badge dựa trên nội dung bài viết hoặc loại file *@
+                                            <span class="badge bg-info text-dark">PDF</span>
+                                        </td>
+                                        <td class="text-muted small">@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                        <td class="text-center">
+                                            @* Nút tải về thực tế *@
+                                            <a asp-action="Details" asp-controller="Post" asp-route-id="@item.Id" class="text-success fs-5" title="Xem chi tiết">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-muted small italic">
+                                        Không tìm thấy tài liệu nào phù hợp.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

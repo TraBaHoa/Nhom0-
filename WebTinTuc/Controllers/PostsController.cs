@@ -4,7 +4,7 @@ using WebTinTuc.Data.Entities;
 using WebTinTuc.Repositories;
 using WebTinTuc.Models.ViewModels;
 using WebTinTuc.Helpers;
-using System.Security.Claims; // Để lấy UserId người dùng hiện tại
+using System.Security.Claims;
 
 namespace WebTinTuc.Controllers
 {
@@ -24,10 +24,7 @@ namespace WebTinTuc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Trang quản lý bài viết CHỈ CẦN danh sách tất cả bài viết
             var posts = await _postRepository.GetAllWithCategoriesAsync();
-
-            // TRUYỀN THẲNG danh sách posts qua View
             return View(posts);
         }
 
@@ -39,7 +36,8 @@ namespace WebTinTuc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PostViewModel model)
+        // Bổ sung tham số List<IFormFile> moreImages để nhận nhiều ảnh từ View
+        public async Task<IActionResult> Create(PostViewModel model, List<IFormFile> moreImages)
         {
             if (ModelState.IsValid)
             {
@@ -55,14 +53,36 @@ namespace WebTinTuc.Controllers
                     Summary = model.Summary,
                     Content = model.Content,
                     ImageUrl = imageUrl,
-                    CategoryId = model.CategoryId, // Đảm bảo ID này khớp với bảng Categories (1-8, 12)
+                    CategoryId = model.CategoryId,
                     CreatedDate = DateTime.Now,
                     IsActive = true,
                     IsPublished = true,
-                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) // Lưu ID của user đang đăng nhập
+                    UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 };
 
+                // 1. Lưu bài viết trước để có ID
                 await _postRepository.CreateAsync(post);
+
+                // 2. PHẦN THÊM MỚI: Xử lý lưu nhiều ảnh vào bảng PostImages
+                if (moreImages != null && moreImages.Count > 0)
+                {
+                    foreach (var file in moreImages)
+                    {
+                        // Tải ảnh lên thư mục 'posts'
+                        string galleryImageUrl = await _blobHelper.UploadBlobAsync(file, "posts");
+
+                        var postImage = new PostImage
+                        {
+                            PostId = post.Id, // Link với bài viết vừa tạo
+                            ImageUrl = galleryImageUrl
+                        };
+
+                        // Bạn cần đảm bảo Repository có hỗ trợ thêm PostImage hoặc dùng Context trực tiếp
+                        // Ở đây tôi giả định bạn dùng một hàm CreateImageAsync hoặc thực hiện qua Repository
+                        await _postRepository.AddImageAsync(postImage);
+                    }
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -90,7 +110,8 @@ namespace WebTinTuc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PostViewModel model)
+        // Bổ sung thêm List<IFormFile> moreImages cho cả trang Edit nếu muốn thêm ảnh mới
+        public async Task<IActionResult> Edit(int id, PostViewModel model, List<IFormFile> moreImages)
         {
             if (id != model.Id) return NotFound();
 
@@ -99,7 +120,6 @@ namespace WebTinTuc.Controllers
                 var post = await _postRepository.GetByIdAsync(id);
                 if (post == null) return NotFound();
 
-                // Cập nhật thông tin
                 post.Title = model.Title;
                 post.Summary = model.Summary;
                 post.Content = model.Content;
@@ -111,21 +131,32 @@ namespace WebTinTuc.Controllers
                 }
 
                 await _postRepository.UpdateAsync(post);
+
+                // Thêm ảnh mới vào Gallery nếu có
+                if (moreImages != null && moreImages.Count > 0)
+                {
+                    foreach (var file in moreImages)
+                    {
+                        string galleryImageUrl = await _blobHelper.UploadBlobAsync(file, "posts");
+                        await _postRepository.AddImageAsync(new PostImage { PostId = post.Id, ImageUrl = galleryImageUrl });
+                    }
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
             return View(model);
         }
-        // Trang Xem chi tiết
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-            var post = await _postRepository.GetByIdAsync(id.Value); // Gọi hàm đã Include Category
+            // Đảm bảo GetByIdAsync đã .Include(p => p.PostImages) để hiển thị ở trang Details
+            var post = await _postRepository.GetByIdAsync(id.Value);
             if (post == null) return NotFound();
             return View(post);
         }
 
-        // Trang xác nhận Xóa (Giao diện)
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -134,20 +165,15 @@ namespace WebTinTuc.Controllers
             return View(post);
         }
 
-        // Lệnh Xóa thật sự (Khi nhấn nút xác nhận)
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            // 1. Tìm đối tượng bài viết dựa trên id
             var post = await _postRepository.GetByIdAsync(id);
-
             if (post != null)
             {
-                // 2. Truyền cả đối tượng 'post' vào hàm xóa (đúng kiểu Entity bài viết)
                 await _postRepository.DeleteAsync(post);
             }
-
             return RedirectToAction(nameof(Index));
         }
     }

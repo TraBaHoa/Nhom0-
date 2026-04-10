@@ -1,32 +1,145 @@
-﻿@{
-    ViewData["Title"] = "Giới thiệu";
+﻿HTML
+<style>
+    /* 1. Định nghĩa màu sắc thương hiệu dựa trên Ảnh 6 */
+    :root {
+        --nd-primary: #0056b3;
+        --nd-bg-light: #fdfdfd;B
+    }
+
+    /* 2. Làm đẹp Header trang Giới thiệu */
+    .bg-primary.text-white.p-4 {
+        background: linear-gradient(135deg, #0056b3 0%, #00448b 100%) !important;
+        border-bottom: 4px solid #ffc107; /* Vạch vàng đặc trưng */
+    }
+
+    /* 3. Tinh chỉnh các tiêu đề mục (H4) cho giống Ảnh 6 */
+    h4.text-primary.fw-bold.border-bottom {
+        color: var(--nd-primary) !important;
+        padding-bottom: 12px;
+        margin-top: 30px;
+        position: relative;
+        border-bottom: 2px solid #eee !important;
+        font-size: 1.4rem;
+    }
+    /* Tạo vạch xanh đậm dưới tiêu đề */
+    h4.text-primary.fw-bold.border-bottom::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100px;
+        height: 3px;
+        background-color: var(--nd-primary);
+    }
+
+    /* 4. Định dạng văn bản nội dung */
+    p {
+        line-height: 1.8;
+        font-size: 1.05rem;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+
+    /* 5. Làm đẹp hình ảnh minh họa */
+    .col-md-5 img {
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        border: 5px solid white !important;
+    }
+    .col-md-5 img:hover {
+        transform: scale(1.03);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+
+    /* 6. Nâng cấp khối "Thay lời kết" */
+    .alert-primary {
+        background-color: #f0f7ff !important;
+        border-left: 5px solid var(--nd-primary) !important;
+        color: #003a7a;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    /* 7. Hiệu ứng cho các đoạn text quan trọng */
+    strong {
+        color: var(--nd-primary);
+    }
+
+    /* Chỉnh lề cho container */
+    .card-body {
+        background-color: var(--nd-bg-light);
+    }
+</style>
+
+@{
+    ViewData["Title"] = "Giới thiệu - Trường THPT Nguyễn Du";
 }
 
-<div class="container mt-4">
+<div class="container mt-4 mb-5">
     <div class="card shadow-sm border-0 overflow-hidden">
+        @* Header trang Giới thiệu *@
         <div class="bg-primary text-white p-4">
-            <h2 class="fw-bold mb-0"><i class="fas fa-university me-2"></i>GIỚI THIỆU TRƯỜNG THPT NGUYỄN DU</h2>
+            <h2 class="fw-bold mb-0 text-uppercase"><i class="fas fa-university me-2"></i>Giới thiệu Trường THPT Nguyễn Du</h2>
         </div>
-        <div class="card-body p-4">
+
+        <div class="card-body p-4 p-lg-5">
             <div class="row">
-                <div class="col-md-6">
-                    <h4 class="text-primary fw-bold border-bottom pb-2">Lịch sử hình thành</h4>
+                <div class="col-12">
+                    @* 1. Giới thiệu chung *@
+                    <h4 class="text-primary fw-bold border-bottom pb-2 mb-3">1. Giới thiệu chung</h4>
                     <p style="text-align: justify;">
-                        Trường THPT Nguyễn Du tự hào là một trong những ngôi trường có bề dày truyền thống dạy và học tại TP. Hồ Chí Minh.
-                        Với đội ngũ giáo viên tâm huyết và cơ sở vật chất hiện đại, trường luôn là nơi ươm mầm cho những tài năng trẻ.
+                        Trường Trung học Phổ thông Nguyễn Du được thành lập ngày 11/10/1971 theo Quyết định số 1866/GD/NĐ ngày 30/9/1971 của Bộ Giáo dục và Thanh niên chế độ cũ (Tiền thân là trường Trần Lục). Trường tọa lạc tại số XX1 Đồng Nai, Cư xá Bắc Hải, Phường 15, Quận 10, TP. Hồ Chí Minh, trên diện tích 12.246m2.
                     </p>
-                    <h4 class="text-primary fw-bold border-bottom pb-2 mt-4">Tầm nhìn & Sứ mệnh</h4>
-                    <ul>
-                        <li>Xây dựng môi trường giáo dục hạnh phúc, năng động.</li>
-                        <li>Đào tạo những thế hệ học sinh có tri thức, đạo đức và kỹ năng hội nhập.</li>
-                        <li>Không ngừng đổi mới phương pháp dạy và học.</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <img src="~/images/banner-chinh.jpg" class="img-fluid rounded shadow-sm mb-3" alt="Trường Nguyễn Du">
-                        <div class="alert alert-info border-0">
-                            <h6 class="fw-bold"><i class="fas fa-info-circle me-2"></i>Thông tin liên hệ:</h6>
-                            <p class="small mb-0">Địa chỉ: XXI Đồng Nai, Phường 15, Quận 10, TP. Hồ Chí Minh</p>
+                    
+                    <div class="row my-4">
+                        <div class="col-md-7">
+                            <p style="text-align: justify;">
+                                Trường khai giảng khóa đầu tiên vào năm học 1972 – 1973 và là trường Trung học cấp II – III công lập đầu tiên ở Sài Gòn có nam sinh và nữ sinh học chung. Ngay từ những năm đầu tiên, trường đã đóng góp rất nhiều cho các hoạt động Văn – Thể – Mỹ của ngành Giáo dục như tham gia triển lãm văn hóa tại Sân vận động Hoa Lư với các sản phẩm thủ công mỹ nghệ. Đặc biệt, giáo viên và học sinh của trường đã làm quyển “Truyện Kiều” viết tay rất công phu. Sau đó, tác phẩm này đã được sung vào Thư viện Quốc gia.
+                            </p>
+                            <p style="text-align: justify;">
+                                Đến ngày 30/4/1975, khi Sài Gòn được giải phóng, trường Trung học Phổ thông Nguyễn Du do một bộ phận của Ủy ban Quân quản đến tiếp quản và bàn giao cho Hiệu trưởng mới vào tháng 2/1976. Từ đó đến nay, các thế hệ lãnh đạo nhà trường cùng tập thể sư phạm và toàn thể học sinh đã chung sức phấn đấu đưa trường Trung học Phổ thông Nguyễn Du ngày càng phát triển.
+                            </p>
+                        </div>
+                        <div class="col-md-5">
+                            <img src="~/images/banner-chinh.jpg" class="img-fluid rounded shadow-sm border" alt="Trường Nguyễn Du" onerror="this.src='/images/default-school.jpg'">
+                                <p class="small text-center text-muted mt-2 fst-italic">Khuôn viên trường THPT Nguyễn Du</p>
+                            </div>
+                        </div>
+
+                        @* 2. Cơ sở vật chất và đội ngũ giáo viên *@
+                        <h4 class="text-primary fw-bold border-bottom pb-2 mt-5 mb-3">2. Cơ sở vật chất và đội ngũ giáo viên</h4>
+                        <p style="text-align: justify;">
+                            Được thành lập từ năm 1971, trường đã không ngừng phát triển về cơ sở vật chất, đội ngũ giáo viên và chất lượng giáo dục, trở thành một trong những ngôi trường cấp ba uy tín của thành phố.
+                        </p>
+                        <p style="text-align: justify;">
+                            Trường được đầu tư hệ thống cơ sở vật chất hiện đại, đáp ứng nhu cầu học tập và rèn luyện của học sinh với các phòng học đều được trang bị đầy đủ máy lạnh và các thiết bị giảng dạy (TV, máy chiếu, loa,…), có phòng thí nghiệm, thư viện, phòng tin học với hệ thống máy tính kết nối internet, có phòng sinh hoạt Câu lạc bộ, trang bị wifi phủ sóng toàn trường,… Đặc biệt, khuôn viên trường rộng rãi, xanh mát, có sân đá bóng, sân bóng rổ, tạo môi trường thoải mái cho việc học tập và rèn luyện của học sinh.
+                        </p>
+                        <p style="text-align: justify;">
+                            Với phương châm: <strong>“Chữ tâm kia mới bằng ba chữ tài”</strong>, trường THPT Nguyễn Du là trường THPT có chất lượng dạy và học cao. Đội ngũ giáo viên của trường gồm những thầy cô có chuyên môn cao, tận tâm với nghề, luôn đổi mới phương pháp giảng dạy để giúp học sinh phát triển năng lực và phẩm chất một cách hiệu quả nhất, đặc biệt là trong bối cảnh đổi mới giáo dục như hiện nay. Thầy cô luôn cố gắng giúp đỡ từng học sinh trau dồi những phẩm chất tốt đẹp và phát triển tối đa những năng lực của bản thân, tạo ra môi trường học tập thân thiện, học sinh tích cực.
+                        </p>
+
+                        @* 3. Hoạt động học tập và ngoại khóa *@
+                        <h4 class="text-primary fw-bold border-bottom pb-2 mt-5 mb-3">3. Hoạt động học tập và ngoại khóa</h4>
+                        <p style="text-align: justify;">
+                            Ngoài chương trình giảng dạy theo quy định, trường còn tổ chức nhiều chuyên đề học tập và các hoạt động ngoại khóa bổ ích, giúp học sinh phát triển kỹ năng toàn diện:
+                        </p>
+                        <p style="text-align: justify;">
+                            Về học tập, trường THPT Nguyễn Du thực hiện dạy học Tiếng Anh với giáo viên bản ngữ, lồng ghép tích hợp kiến thức liên môn, kết hợp các phương pháp dạy học tích cực, dạy học cá thể giúp học sinh hứng thú, chủ động lĩnh hội kiến thức. Các bạn học sinh luôn được Nhà trường và Đoàn trường quan tâm, chú trọng tổ chức các hoạt động trải nghiệm, ngoại khoá, văn nghệ, thể thao giúp giáo dục toàn diện cho học sinh. Trong năm học, các chuyên đề giáo dục kỹ năng sống kết hợp công tác thiện nguyện được chú trọng để học sinh trường THPT Nguyễn Du có nhiều trải nghiệm mới mẻ, học nhiều điều lý thú.
+                        </p>
+                        <p style="text-align: justify;">
+                            Bên cạnh các chuyên đề học tập, học sinh trường THPT Nguyễn Du được thỏa sức đam mê và phát triển tài năng với 20 Câu lạc bộ như: Mỹ thuật, Hoá học - Công nghệ, Judo, Bóng rổ, Nhảy hiện đại, STEM, Sân khấu âm nhạc, Điện ảnh, Nhiếp ảnh, Cờ tướng… Đến với trường THPT Nguyễn Du, học sinh được phát triển mọi mặt từ lĩnh hội kiến thức đến phát triển các năng khiếu bản thân. Bên cạnh đó, học sinh luôn được cán bộ, giáo viên tận tình lắng nghe, tư vấn để có được những định hướng sáng suốt, tiếp bước đến tương lai rực rỡ.
+                        </p>
+
+                        @* 4. Thành tích nổi bật *@
+                        <h4 class="text-primary fw-bold border-bottom pb-2 mt-5 mb-3">4. Thành tích nổi bật</h4>
+                        <p style="text-align: justify;">
+                            Nhờ vào những nỗ lực không ngừng của thầy và trò, trường THPT Nguyễn Du đã đạt được nhiều thành tích xuất sắc trong các kỳ thi Học sinh giỏi cấp Thành phố, tỉ lệ học sinh đậu Tốt nghiệp THPT và vào Đại học, Cao Đẳng hằng năm luôn đạt 100%, trong đó có nhiều em trúng tuyển vào các trường Đại học danh tiếng trong nước và quốc tế. Bên cạnh đó, học sinh trường THPT Nguyễn Du cũng đạt nhiều giải thưởng về văn nghệ, mỹ thuật và nhiều huy chương tại các giải đấu thể dục thể thao các cấp.
+                        </p>
+
+                        @* 5. Thay lời kết *@
+                        <div class="alert alert-primary mt-5 border-0 p-4">
+                            <h4 class="fw-bold mb-3">5. Thay lời kết</h4>
+                            <p style="text-align: justify;" class="mb-0">
+                                Với hơn 50 năm xây dựng và phát triển, trường THPT Nguyễn Du tự hào là nơi giúp học sinh trưởng thành cả về trí tuệ và nhân cách. Bên cạnh đó, trường luôn đổi mới không ngừng, tiếp tục khẳng định vị thế của mình trong hệ thống giáo dục của thành phố Hồ Chí Minh nói riêng và cả nước nói chung, xứng đáng là lựa chọn đáng tin cậy của nhiều thế hệ học sinh.
+                            </p>
                         </div>
                     </div>
                 </div>

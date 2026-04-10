@@ -1,4 +1,4 @@
-﻿@model WebTinTuc.Data.Entities.Post
+﻿c@model WebTinTuc.Data.Entities.Post
 
 @{
     ViewData["Title"] = Model.Title;
@@ -28,9 +28,9 @@
                     </div>
                 }
 
-                <div class="content-body" style="line-height: 1.8; font-size: 1.1rem; text-align: justify;">
-                    @* Dùng Html.Raw để hiển thị đúng nội dung có định dạng (như xuống dòng, bôi đậm) *@
-                    @Html.Raw(Model.Content)
+                @* CẬP NHẬT TẠI ĐÂY *@
+                <div class="content-body" style="line-height: 1.8; font-size: 1.1rem; text-align: justify; white-space: pre-line;">
+                    @Model.Content
                 </div>
             </article>
 

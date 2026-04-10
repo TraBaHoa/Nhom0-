@@ -4,7 +4,6 @@ using WebTinTuc.Data.Entities;
 
 namespace WebTinTuc.Data
 {
-    // Kế thừa từ IdentityDbContext để quản lý User và Role (Admin/Biên tập viên)
     public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -12,21 +11,24 @@ namespace WebTinTuc.Data
         {
         }
 
-        // Đăng ký các bảng cho trang tin tức
+        public DbSet<Feedback> Feedbacks { get; set; }
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<Post> Posts { get; set; }
+
+        // THÊM DÒNG NÀY: Để đăng ký bảng lưu nhiều ảnh, sửa lỗi CS1061
+        public DbSet<PostImage> PostImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Cấu hình Fluent API cho Category (Menu đa cấp)
+            // Cấu hình Fluent API cho Category
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
 
-                // Một danh mục có thể có nhiều bài viết
                 entity.HasMany(c => c.Posts)
                       .WithOne(p => p.Category)
                       .HasForeignKey(p => p.CategoryId)
@@ -40,13 +42,22 @@ namespace WebTinTuc.Data
                 entity.Property(e => e.Title).IsRequired().HasMaxLength(255);
                 entity.Property(e => e.Summary).IsRequired();
                 entity.Property(e => e.Content).IsRequired();
-
-                // Chỉ định kiểu dữ liệu cho CreatedDate nếu cần
                 entity.Property(e => e.CreatedDate).HasDefaultValueSql("GETDATE()");
+
+                // THÊM CẤU HÌNH: Một bài viết có nhiều ảnh phụ
+                entity.HasMany(p => p.PostImages)
+                      .WithOne(i => i.Post)
+                      .HasForeignKey(i => i.PostId)
+                      .OnDelete(DeleteBehavior.Cascade); // Xóa bài viết thì xóa luôn ảnh phụ
             });
 
-            // Ngăn chặn việc xóa User khi đang có bài viết (Tùy chọn)
-            // Hoặc cấu hình thêm các ràng buộc duy nhất nếu cần
+            // THÊM CẤU HÌNH CHO PostImage
+            modelBuilder.Entity<PostImage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ImageUrl).IsRequired();
+            });
+
             modelBuilder.Entity<Category>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
