@@ -75,17 +75,12 @@ namespace WebTinTuc.Controllers
                         {
                             PostId = post.Id, // Link với bài viết vừa tạo
                             ImageUrl = galleryImageUrl
-                        };
-
-                        // Bạn cần đảm bảo Repository có hỗ trợ thêm PostImage hoặc dùng Context trực tiếp
-                        // Ở đây tôi giả định bạn dùng một hàm CreateImageAsync hoặc thực hiện qua Repository
+                        };                  
                         await _postRepository.AddImageAsync(postImage);
                     }
                 }
-
                 return RedirectToAction(nameof(Index));
             }
-
             ViewBag.Categories = await _categoryRepository.GetAllAsync();
             return View(model);
         }
@@ -110,7 +105,6 @@ namespace WebTinTuc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // Bổ sung thêm List<IFormFile> moreImages cho cả trang Edit nếu muốn thêm ảnh mới
         public async Task<IActionResult> Edit(int id, PostViewModel model, List<IFormFile> moreImages)
         {
             if (id != model.Id) return NotFound();

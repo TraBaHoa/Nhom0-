@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebTinTuc.Data;
+using WebTinTuc.Models.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
 
 namespace WebTinTuc.Controllers
 {
-    /// <summary>
-    /// Controller quản lý các chức năng dành riêng cho sinh viên/học sinh
-    /// Tác giả: Trà Quang Vinh
-    /// </summary>
     public class StudentController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -46,7 +43,7 @@ namespace WebTinTuc.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 // Sử dụng toán tử ?. để an toàn khi searchString bị null
-                query = query.Where(p => p.Title != null && p.Title.Contains(searchString ?? ""));
+                query = query.Where(p => p.Title != null && p.Title.Contains(searchString));
             }
 
             var taiLieu = await query.OrderByDescending(p => p.CreatedDate).ToListAsync();
@@ -54,17 +51,41 @@ namespace WebTinTuc.Controllers
         }
 
         // 3. Lịch công tác tuần - Hỗ trợ lọc bài viết
-        public async Task<IActionResult> WorkSchedule()
+        public async Task<IActionResult> WorkSchedule(DateTime? date, string grade = "Tất cả")
         {
             ViewData["Title"] = "Lịch công tác tuần";
 
-            // Lấy toàn bộ bài viết trong danh mục Lịch (ID: 22)
-            var lichCongTac = await _context.Posts
-                .Where(p => p.CategoryId == 22)
-                .OrderByDescending(p => p.CreatedDate)
-                .ToListAsync();
+            // 1. Nếu không chọn ngày, mặc định lấy ngày hiện tại
+            DateTime searchDate = date ?? DateTime.Now;
 
-            return View(lichCongTac);
+            // 2. Tính toán ngày bắt đầu tuần (Thứ Hai) và ngày kết thúc tuần (Chủ Nhật)
+            // Tính toán dựa trên searchDate
+            int diff = (7 + (searchDate.DayOfWeek - DayOfWeek.Monday)) % 7;
+            DateTime startOfWeek = searchDate.AddDays(-1 * diff).Date;
+            DateTime endOfWeek = startOfWeek.AddDays(7).AddTicks(-1);
+
+            // 3. Truy vấn Database: Lấy các bài viết trong khoảng từ Thứ 2 đến Chủ Nhật của tuần đó
+            var query = _context.Posts.Where(p =>
+                p.CategoryId == 22 &&
+                p.IsPublished &&
+                p.CreatedDate >= startOfWeek &&
+                p.CreatedDate <= endOfWeek);
+
+            // 4. Lọc theo Khối lớp
+            if (!string.IsNullOrEmpty(grade) && grade != "Tất cả")
+            {
+                query = query.Where(p => p.Title != null && p.Title.Contains(grade));
+            }
+
+            // 5. Trả về ViewModel
+            var model = new WorkScheduleViewModel
+            {
+                Posts = await query.OrderBy(p => p.CreatedDate).ToListAsync(),
+                SelectedDate = searchDate, // Bạn cần thêm property này vào ViewModel
+                SelectedGrade = grade
+            };
+
+            return View(model);
         }
 
         // 4. Tra cứu điểm số (Góc học tập)

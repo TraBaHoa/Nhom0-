@@ -5,6 +5,7 @@
 }
 
 <div class="container mt-4 mb-5">
+    @* --- Banner chào mừng --- *@
     <div class="alert alert-primary border-0 shadow-sm d-flex align-items-center py-4" style="border-left: 5px solid #0056b3 !important;">
         <i class="fas fa-user-circle fa-3x me-3 text-primary"></i>
         <div>
@@ -13,6 +14,7 @@
         </div>
     </div>
 
+    @* --- Các chức năng chính --- *@
     <div class="row g-4 mt-2">
         <div class="col-md-4">
             <div class="card h-100 border-0 shadow-sm transition-hover">
@@ -44,13 +46,50 @@
             <div class="card h-100 border-0 shadow-sm transition-hover">
                 <div class="card-body text-center p-4">
                     <div class="bg-light-danger rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                        <i class="fas fa-clock text-danger fa-lg"></i>
+                        <i class="fas fa-bullhorn text-danger fa-lg"></i>
                     </div>
-                    <h6 class="fw-bold">Lịch kiểm tra</h6>
-                    <p class="small text-muted">Theo dõi lịch thi và các bài kiểm tra sắp tới.</p>
-                    <a href="#" class="btn btn-sm btn-outline-danger px-3 rounded-pill">Xem lịch</a>
+                    <h6 class="fw-bold">Thông báo chung</h6>
+                    <p class="small text-muted">Theo dõi các chỉ đạo và tin tức từ nhà trường.</p>
+                    <a href="#newsSection" class="btn btn-sm btn-outline-danger px-3 rounded-pill">Xem tin</a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    @* --- PHẦN MỚI: BẢNG TIN THÔNG BÁO CHO HỌC SINH --- *@
+    <div class="mt-5" id="newsSection">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold text-dark border-start border-4 border-primary ps-3">THÔNG BÁO MỚI NHẤT</h5>
+            <a asp-controller="News" asp-action="Category" asp-route-id="2" class="text-primary small text-decoration-none">Xem tất cả thông báo >></a>
+        </div>
+
+        <div class="row g-4">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <img src="@item.ImageUrl" class="card-img-top" style="height: 180px; object-fit: cover;" onerror="this.src='/images/banner-khac.jpg'">
+                            <div class="card-body">
+                                <span class="badge bg-light text-primary mb-2">@item.Category?.Name</span>
+                                <h6 class="fw-bold text-truncate-2">@item.Title</h6>
+                                <p class="small text-muted text-truncate-2">@item.Summary</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <small class="text-muted"><i class="far fa-calendar-alt me-1"></i>@item.CreatedDate.ToString("dd/MM/yyyy")</small>
+                                    <a asp-controller="Post" asp-action="Details" asp-route-id="@item.Id" class="btn btn-link btn-sm p-0 text-decoration-none">Đọc thêm</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">Chưa có thông báo mới nào dành cho bạn.</p>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -66,5 +105,12 @@
     .transition-hover:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+
+    .text-truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 </style>

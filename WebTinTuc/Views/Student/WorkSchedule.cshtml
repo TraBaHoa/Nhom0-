@@ -1,4 +1,5 @@
-﻿@model IEnumerable<WebTinTuc.Data.Entities.Post>
+﻿@using WebTinTuc.Models.ViewModels
+@model WorkScheduleViewModel
 @{
     ViewData["Title"] = "Lịch công tác tuần";
 }
@@ -10,39 +11,44 @@
         <p class="text-muted small">Cập nhật lịch họp, sự kiện và hoạt động của nhà trường.</p>
     </div>
 
-    @* BỘ LỌC CHỨC NĂNG *@
-    <div class="card border-0 shadow-sm mb-4 bg-light">
-        <div class="card-body d-flex flex-wrap gap-3 align-items-center">
-            <div class="flex-grow-1">
-                <label class="small fw-bold text-muted">Chọn tuần học:</label>
-                <select class="form-select form-select-sm border-0 shadow-sm">
-                    <option>Tuần 20 (13/04/2026 - 19/04/2026)</option>
-                    <option>Tuần 19 (06/04/2026 - 12/04/2026)</option>
-                </select>
-            </div>
-            <div>
-                <label class="small fw-bold text-muted">Khối lớp:</label>
-                <div class="btn-group btn-group-sm d-block shadow-sm">
-                    <button class="btn btn-outline-primary active">Tất cả</button>
-                    <button class="btn btn-outline-primary">Khối 10</button>
-                    <button class="btn btn-outline-primary">Khối 11</button>
-                    <button class="btn btn-outline-primary">Khối 12</button>
+    @* BỘ LỌC CHỨC NĂNG - Đã đổi sang Lịch chọn ngày thực *@
+    <form asp-action="WorkSchedule" method="get" id="filterForm">
+        <div class="card border-0 shadow-sm mb-4 bg-light">
+            <div class="card-body d-flex flex-wrap gap-3 align-items-center">
+                <div class="flex-grow-1">
+                    <label class="small fw-bold text-muted">Xem lịch theo ngày:</label>
+                    @* Ô chọn ngày thực tế *@
+                    <input type="date" name="date" 
+                           value="@Model.SelectedDate.ToString("yyyy-MM-dd")" 
+                           class="form-control form-control-sm border-0 shadow-sm"
+                           onchange="document.getElementById('filterForm').submit()">
+                    <small class="text-info mt-1 d-block" style="font-size: 0.75rem;">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Hệ thống sẽ hiển thị lịch của cả tuần chứa ngày bạn chọn.
+                    </small>
+                </div>
+                <div>
+                    <label class="small fw-bold text-muted">Khối lớp:</label>
+                    <div class="btn-group btn-group-sm d-block shadow-sm">
+                        <button type="submit" name="grade" value="Tất cả" class="btn btn-outline-primary @(Model.SelectedGrade == "Tất cả" ? "active" : "")">Tất cả</button>
+                        <button type="submit" name="grade" value="Khối 10" class="btn btn-outline-primary @(Model.SelectedGrade == "Khối 10" ? "active" : "")">Khối 10</button>
+                        <button type="submit" name="grade" value="Khối 11" class="btn btn-outline-primary @(Model.SelectedGrade == "Khối 11" ? "active" : "")">Khối 11</button>
+                        <button type="submit" name="grade" value="Khối 12" class="btn btn-outline-primary @(Model.SelectedGrade == "Khối 12" ? "active" : "")">Khối 12</button>
+                    </div>
+                </div>
+                <div class="mt-3 mt-md-0 d-flex gap-2">
+                    <button type="button" class="btn btn-success btn-sm px-3 shadow-sm" onclick="exportExcel()">
+                        <i class="fas fa-file-excel me-2"></i>Xuất Excel
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm px-3 shadow-sm" onclick="window.print()">
+                        <i class="fas fa-print me-2"></i>In lịch
+                    </button>
                 </div>
             </div>
-            <div class="mt-3 mt-md-0 d-flex gap-2">
-                @* Nút xuất Excel bấm được *@
-                <button class="btn btn-success btn-sm px-3 shadow-sm" onclick="exportExcel()">
-                    <i class="fas fa-file-excel me-2"></i>Xuất Excel
-                </button>
-                @* Nút In lịch bấm được *@
-                <button class="btn btn-danger btn-sm px-3 shadow-sm" onclick="window.print()">
-                    <i class="fas fa-print me-2"></i>In lịch
-                </button>
-            </div>
         </div>
-    </div>
+    </form>
 
-    @* BẢNG LỊCH CÔNG TÁC ĐỔ DỮ LIỆU THẬT *@
+    @* BẢNG LỊCH CÔNG TÁC *@
     <div class="table-responsive shadow-sm rounded border">
         <table class="table table-bordered align-middle mb-0 bg-white" id="scheduleTable">
             <thead class="text-center" style="background-color: #ffc107;">
@@ -53,73 +59,54 @@
                 </tr>
             </thead>
             <tbody>
-                @if (Model != null && Model.Any())
+                @if (Model.Posts != null && Model.Posts.Any())
                 {
-                    foreach (var item in Model)
+                    foreach (var item in Model.Posts)
                     {
                         <tr>
                             <td class="text-center fw-bold bg-light py-4">
-                                @* Tiêu đề bài viết làm tên Thứ (Ví dụ: Thứ Hai) *@
                                 @item.Title <br />
-                                <span class="text-muted small fw-normal">@item.CreatedDate.ToString("dd/MM")</span>
+                                <span class="text-muted small fw-normal">@item.CreatedDate.ToString("dd/MM/yyyy")</span>
                             </td>
                             <td class="ps-3 border-start border-4 border-info">
-                                @* Description làm nội dung buổi sáng *@
                                 @Html.Raw(item.Summary)
                             </td>
                             <td class="ps-3">
-                                @* Content làm nội dung buổi chiều *@
                                 @Html.Raw(item.Content)
-                            </td>
-                            <td class="ps-3">
-                                   @item.Title
                             </td>
                         </tr>
                     }
                 }
                 else
                 {
-                    @* Nếu DB trống, hiện thông báo cho Vinh dễ kiểm tra *@
                     <tr>
                         <td colspan="3" class="text-center py-5 text-muted italic">
                             <i class="fas fa-calendar-times fa-3x mb-3"></i>
-                            <p>Chưa có dữ liệu lịch tuần này. Vinh hãy thêm bài viết vào Category 22 nhé!</p>
+                            <p>Không tìm thấy lịch trực cho ngày @Model.SelectedDate.ToString("dd/MM/yyyy") của @Model.SelectedGrade.</p>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-
-    @* PHẦN THỜI KHÓA BIỂU CÁ NHÂN *@
-    <div class="mt-5">
-        <h5 class="fw-bold"><i class="fas fa-user-clock me-2 text-primary"></i>Thời khóa biểu lớp của bạn</h5>
-        <div class="alert alert-info border-0 shadow-sm mt-3 d-flex justify-content-between align-items-center">
-            <span>Bạn đang xem thời khóa biểu lớp <b>12A1</b> - Học kỳ II</span>
-            @* Link tải file thực tế *@
-            <a href="/uploads/tkb_12a1.pdf" download class="btn btn-sm btn-primary rounded-pill px-4 shadow-sm fw-bold">
-                <i class="fas fa-download me-2"></i>Tải TKB (.pdf)
-            </a>
-        </div>
-    </div>
 </div>
 
-<script>
-    function exportExcel() {
-        alert("Đang chuẩn bị tệp Excel cho Vinh...");
-        // Logic thực tế có thể dùng thư viện SheetJS hoặc chuyển hướng đến Action Export
-    }
-</script>
+@section Scripts {
+    <script>
+        function exportExcel() {
+            alert("Đang chuẩn bị tệp Excel lịch công tác...");
+        }
+    </script>
+}
 
 <style>
-    /* Style cho bảng */
+    /* Giữ nguyên các Style cũ của bạn */
     .table thead th { vertical-align: middle; border: none; font-weight: bold; }
     .table tbody td { padding: 1.25rem 0.75rem; transition: background 0.2s; }
     .table tbody tr:hover td { background-color: #fffdf5 !important; }
     
-    /* Hiệu ứng in ấn chuyên nghiệp */
     @@media print {
-        header, footer, .btn, label, .card, .alert, .border-start { display: none !important; }
+        header, footer, .btn, label, .card, .alert, .border-start, #filterForm { display: none !important; }
         .container { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
         .table { width: 100% !important; border: 1px solid #000 !important; }
         .table-responsive { overflow: visible !important; }

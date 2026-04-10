@@ -45,10 +45,28 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">TRANG CHỦ</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="About">GIỚI THIỆU</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" asp-area="" asp-controller="News" asp-action="Index">TIN TỨC</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Contact">LIÊN HỆ</a></li>
+    @* 1. Link Trang chủ *@
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">TRANG CHỦ</a>
+    </li>
+
+    @* --- CHÈN VÀO ĐÂY: LINK CỔNG HỌC SINH --- *@
+    <li class="nav-item">
+        <a class="nav-link text-warning fw-bold" asp-area="" asp-controller="Student" asp-action="Portal">
+            <i class="fas fa-graduation-cap me-1"></i>CỔNG HỌC SINH
+        </a>
+    </li>
+
+    @* 2. Các link còn lại giữ nguyên *@
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="About">GIỚI THIỆU</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="" asp-controller="News" asp-action="Index">TIN TỨC</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Contact">LIÊN HỆ</a>
+    </li>
 
                         @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
                         {
@@ -108,10 +126,10 @@
                 <div class="col-md-6 text-md-end">
                     <h5 class="text-uppercase fw-bold border-bottom pb-2">Liên kết nhanh</h5>
                     <ul class="list-unstyled mt-3">
-                        <li><a href="#">Cổng thông tin học sinh</a></li>
-                        <li><a href="#">Thời khóa biểu tuần</a></li>
-                        <li><a href="#">Thư viện trực tuyến</a></li>
-                    </ul>
+                          <li><a asp-controller="Student" asp-action="Portal">Cổng thông tin học sinh</a></li>
+                          <li><a asp-controller="Student" asp-action="WorkSchedule">Thời khóa biểu tuần</a></li>
+                          <li><a asp-controller="Student" asp-action="DigitalLibrary">Thư viện trực tuyến</a></li>
+                  </ul>
                 </div>
             </div>
             <hr class="bg-secondary">
